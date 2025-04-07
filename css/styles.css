@@ -1,0 +1,379 @@
+body {
+    font-family: 'Lato', 'Segoe UI', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f9f9f9;
+    color: #333;
+}
+
+.container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 20px;
+    position: relative;
+}
+
+h1 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 30px;
+}
+
+.filters {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-bottom: 20px;
+    background-color: #fff;
+    padding: 15px;
+    border-radius: 4px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.filter-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.filter-label {
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: #555;
+}
+
+select {
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    min-width: 180px;
+}
+
+button {
+    background-color: #5a75b0;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.2s;
+    align-self: flex-end;
+}
+
+button:hover {
+    background-color: #4a65a0;
+}
+
+#chart-container {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    height: 1000px;
+    position: relative;
+}
+
+#sankey-chart {
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+}
+
+svg {
+    display: block;
+    width: 1600px;
+    height: 1000px;
+    overflow: visible;
+    margin: 0 auto;
+}
+
+/* Tooltip styling */
+.tooltip {
+    position: absolute;
+    padding: 8px;
+    background: rgba(255, 255, 255, 0.9);
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    pointer-events: none;
+    font-size: 12px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    z-index: 10;
+    max-width: 200px;
+}
+
+.tooltip h3 {
+    margin: 0 0 8px 0;
+}
+
+.tooltip p {
+    margin: 3px 0;
+}
+
+/* Node styling */
+.node rect {
+    fill-opacity: 0.9;
+    shape-rendering: crispEdges;
+    stroke-width: 0;
+}
+
+.node text {
+    pointer-events: none;
+    font-size: 14px;
+    font-weight: 500;
+    fill: #333;
+}
+
+/* Link styling */
+.link {
+    stroke-opacity: 0.7;
+}
+
+.link:hover {
+    stroke-opacity: 0.9;
+}
+
+/* Platform node colors - specific for each platform */
+.platform-Amazon {
+    fill: #57a7f0; /* Light blue */
+}
+
+.platform-Apple-Music {
+    fill: #e94335; /* Red */
+}
+
+.platform-Deezer {
+    fill: #f06ebd; /* Pink */
+}
+
+.platform-YouTube {
+    fill: #e33810; /* Darker red */
+}
+
+.platform-SiriusXM {
+    fill: #282faf; /* Dark blue */
+}
+
+.platform-Spotify {
+    fill: #40a340; /* Green */
+}
+
+.platform-TikTok {
+    fill: #000000; /* Black */
+}
+
+.platform-Pandora {
+    fill: #4169e1; /* Blue */
+}
+
+.platform-Shazam {
+    fill: #55a2f0; /* Light blue */
+}
+
+/* Genre node styling with gray background */
+.genre-container {
+    fill: #ececec;
+    stroke: #c0c0c0;
+    stroke-width: 1px;
+}
+
+.genre-label {
+    font-size: 14px;
+}
+
+.genre-abbr {
+    font-weight: bold;
+    font-size: 12px;
+}
+
+/* Stars for genre success ratings */
+.genre-stars {
+    color: #FFFF00;
+    font-size: 14px;
+    text-shadow: 0px 0px 1px #666; /* Add a slight shadow to make yellow stars more visible */
+}
+
+/* Cross-Platform Success legend */
+.cross-platform-legend {
+    position: absolute;
+    top: 50px;
+    right: 30px;
+    background-color: rgba(255, 255, 255, 0.9);
+    padding: 10px;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+}
+
+.cross-platform-title {
+    font-weight: bold;
+    font-size: 14px;
+    margin-bottom: 8px;
+}
+
+.platform-rating {
+    display: flex;
+    align-items: center;
+    margin-bottom: 5px;
+}
+
+.star-container {
+    display: inline-block;
+    min-width: 80px;
+}
+
+.star {
+    color: #FFFF00;
+    font-size: 18px;
+    text-shadow: 0px 0px 1px #666; /* Add a slight shadow to make yellow stars more visible */
+}
+
+.star-empty {
+    color: #ccc;
+}
+
+.platform-count {
+    margin-left: 8px;
+    font-size: 13px;
+}
+
+/* Legend */
+.legend {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    margin-top: 20px;
+    font-size: 14px;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.legend-color {
+    width: 16px;
+    height: 16px;
+    border-radius: 3px;
+}
+
+.platform-color {
+    background-color: #4682B4;
+}
+
+.genre-color {
+    background-color: #CD5C5C;
+}
+
+/* Star rating for platform success */
+.star-ratings {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    right: 30px;
+    top: 150px;
+    background-color: rgba(255, 255, 255, 0.9);
+    padding: 10px;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+}
+
+.star-rating {
+    display: flex;
+    align-items: center;
+    margin-bottom: 5px;
+}
+
+.star-rating-label {
+    margin-left: 8px;
+    font-size: 13px;
+}
+
+/* Filter container styling */
+.filter-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 20px 0;
+    padding: 10px;
+    background-color: #f0f0f0;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.filter-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.filter-item label {
+    font-weight: bold;
+    color: #333;
+    font-size: 16px;
+}
+
+.filter-item select {
+    padding: 8px 12px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+    min-width: 200px;
+    background-color: white;
+}
+
+/* Legend container styling */
+.legend-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 10px 0 20px 0;
+    padding: 10px;
+    background-color: #f0f0f0;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.legend-container h3 {
+    margin: 0 0 10px 0;
+    font-size: 18px;
+    color: #333;
+}
+
+.success-legend {
+    display: flex;
+    gap: 20px;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.star {
+    color: #FFBF00;
+    font-size: 18px;
+}
+
+.legend-text {
+    font-size: 14px;
+    color: #333;
+}
+
+/* Genre related styling improvements */
+.genre-abbr {
+    font-weight: bold;
+    font-size: 14px;
+    dominant-baseline: middle;
+    text-anchor: middle;
+}
+
+.genre-label {
+    font-size: 14px;
+    dominant-baseline: middle;
+}
+
+.genre-stars {
+    color: #FFBF00;
+    font-size: 16px;
+    text-shadow: 0px 0px 1px rgba(0,0,0,0.3);
+} 

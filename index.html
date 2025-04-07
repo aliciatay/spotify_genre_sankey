@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Platform to Genre Hit Songs</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="https://unpkg.com/d3-sankey@0.12.3/dist/d3-sankey.min.js"></script>
+</head>
+<body>
+    <div class="filter-container">
+        <div class="filter-item">
+            <label for="genre-filter">Filter by Genre:</label>
+            <select id="genre-filter">
+                <option value="top10">Top 10 Genres</option>
+                <option value="all">All Genres</option>
+                <!-- Genre options will be populated by JavaScript -->
+            </select>
+        </div>
+    </div>
+    
+    <div class="legend-container">
+        <h3>Cross-Platform Success</h3>
+        <div class="success-legend">
+            <div class="legend-item">
+                <span class="star">★</span>
+                <span class="legend-text">Low (1-4 platforms)</span>
+            </div>
+            <div class="legend-item">
+                <span class="star">★★</span>
+                <span class="legend-text">Medium (5-6 platforms)</span>
+            </div>
+            <div class="legend-item">
+                <span class="star">★★★</span>
+                <span class="legend-text">High (7+ platforms)</span>
+            </div>
+        </div>
+    </div>
+    
+    <div id="chart-container">
+        <div id="sankey-chart"></div>
+    </div>
+    
+    <script src="js/data.js"></script>
+    <script src="js/process_data.js"></script>
+    <script src="js/visualization.js"></script>
+    <script src="js/load_data.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            if (window.initVisualization) {
+                window.initVisualization();
+            }
+        });
+    </script>
+</body>
+</html> 
