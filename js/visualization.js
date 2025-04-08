@@ -339,7 +339,7 @@ function updateVisualization() {
             .style("font-size", "9px")
             .style("pointer-events", "none");
 
-        // Add text labels for platform nodes
+        // Add text labels for platform nodes - ensure consistent right-alignment for platforms
         node.filter(d => d.type === "platform")
             .append("text")
             .attr("x", d => d.x0 - 10)
@@ -374,19 +374,6 @@ function updateVisualization() {
             })
             .style("fill", "#F1FF48") // Yellow from palette
             .style("font-size", "12px");
-        
-        // Update text label placement for platform nodes
-        node.filter(d => d.type === "platform")
-            .append("text")
-            .attr("x", d => d.x0 - 10)  // Position to the left of platform nodes
-            .attr("y", d => (d.y1 + d.y0) / 2)
-            .attr("dy", "0.35em")
-            .attr("text-anchor", "end")  // Right-align text to the left of node
-            .text(d => d.name)
-            .style("fill", "#ffffff")
-            .style("font-size", "9px")
-            .style("font-weight", "bold")
-            .style("pointer-events", "none");
         
         console.log("Nodes drawn");
         
