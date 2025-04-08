@@ -14,7 +14,7 @@ const platformColors = {
     "YouTube": "#E33810",     // Dark red
     "SiriusXM": "#F1FF48",    // Yellow
     "Spotify": "#1DB954",     // Spotify green
-    "TikTok": "#141413",      // Dark gray
+    "TikTok": "#00F7EF",      // Bright teal (changed from dark gray)
     "Pandora": "#19D764",     // Light green
     "Shazam": "#4A90E2"       // Blue
 };
