@@ -709,4 +709,14 @@ function dragmove(event, d) {
         .attr("d", d3.sankeyLinkHorizontal());
 }
 
+// Function to get the sankeyData from the global window object
+function getSankeyData() {
+    if (!window.sankeyData || !window.sankeyData.nodes || !window.sankeyData.links) {
+        console.error("No valid sankeyData found in window object");
+        document.getElementById('sankey-chart').innerHTML = "<p>Error: No valid data available for visualization</p>";
+        return null;
+    }
+    return window.sankeyData;
+}
+
 console.log("Visualization.js fully loaded"); 
