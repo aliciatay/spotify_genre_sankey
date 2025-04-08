@@ -309,7 +309,11 @@ function updateVisualization() {
                 .on("start", function() { this.parentNode.appendChild(this); })
                 .on("drag", dragmove));
         
-        // Add a rect for each node
+        // Create a clearer distinction between platform and genre nodes
+        // Improve how platform nodes and labels are created and positioned
+        // Add platform names directly attached to their corresponding rectangles
+
+        // When creating the node rectangles, add a data-name attribute to help with identification
         node.append("rect")
             .attr("height", d => d.y1 - d.y0)
             .attr("width", d => d.x1 - d.x0)
@@ -317,46 +321,45 @@ function updateVisualization() {
                 if (d.type === "platform") {
                     return platformColors[d.name] || "#999";
                 } else {
-                    return "#ececec"; // Light gray for genres
+                    return "#141413"; // Dark gray for genres
                 }
             })
-            .attr("stroke", d => d.type === "genre" ? "#ccc" : "none")
+            .attr("stroke", d => d.type === "genre" ? "#333" : "none")
             .attr("stroke-width", 1)
+            .attr("data-name", d => d.name) // Add node name as data attribute for debugging
             .style("cursor", "move");
-        
-        // First, remove any existing text before adding new text
+
+        // First, completely remove all existing text elements to start fresh
         node.selectAll("text").remove();
 
-        // Add text labels for genre nodes only
+        // For platform nodes, create text elements that are directly tied to each node's group
+        node.filter(d => d.type === "platform")
+            .append("text")
+            .attr("x", d => -10) // Position to the left of platform nodes (relative to the group's position)
+            .attr("y", d => (d.y1 - d.y0) / 2) // Center vertically within the node
+            .attr("dy", "0.35em")
+            .attr("text-anchor", "end")
+            .text(d => d.name) // Use the actual node name
+            .style("fill", "#ffffff")
+            .style("font-size", "9px")
+            .style("font-weight", "bold");
+
+        // For genre nodes, create text elements directly tied to each node's group
         node.filter(d => d.type === "genre")
             .append("text")
-            .attr("x", d => d.x0 - 6)
-            .attr("y", d => (d.y1 + d.y0) / 2)
+            .attr("x", d => -6) // Position text to the left of the node
+            .attr("y", d => (d.y1 - d.y0) / 2) // Center vertically
             .attr("dy", "0.35em")
             .attr("text-anchor", "end")
             .text(d => truncateText(d.name, 9))
             .style("fill", "#ffffff")
-            .style("font-size", "9px")
-            .style("pointer-events", "none");
+            .style("font-size", "9px");
 
-        // Add text labels for platform nodes - ensure consistent right-alignment for platforms
-        node.filter(d => d.type === "platform")
-            .append("text")
-            .attr("x", d => d.x0 - 10)
-            .attr("y", d => (d.y1 + d.y0) / 2)
-            .attr("dy", "0.35em")
-            .attr("text-anchor", "end")
-            .text(d => d.name)
-            .style("fill", "#ffffff")
-            .style("font-size", "9px")
-            .style("font-weight", "bold")
-            .style("pointer-events", "none");
-        
-        // Add stars to the left of genre name (not to the right)
+        // Add stars to the left of genre name
         node.filter(d => d.type === "genre")
             .append("text")
-            .attr("x", d => d.x0 - 30) // Position stars to the left of the genre name
-            .attr("y", d => (d.y1 + d.y0) / 2)
+            .attr("x", d => -30) // Position stars to the left of the genre name
+            .attr("y", d => (d.y1 - d.y0) / 2) // Center vertically
             .attr("dy", "0.35em")
             .attr("text-anchor", "end")
             .attr("class", "genre-stars")
@@ -372,7 +375,7 @@ function updateVisualization() {
                 if (uniquePlatforms >= 5) return "★★";
                 return "★";
             })
-            .style("fill", "#F1FF48") // Yellow from palette
+            .style("fill", "#F1FF48")
             .style("font-size", "12px");
         
         console.log("Nodes drawn");
