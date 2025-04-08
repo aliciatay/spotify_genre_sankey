@@ -2,12 +2,12 @@ body {
     font-family: 'Lato', 'Segoe UI', sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #f9f9f9;
-    color: #333;
+    background-color: #000000;
+    color: #ffffff;
 }
 
 .container {
-    max-width: 1400px;
+    max-width: 500px;
     margin: 0 auto;
     padding: 20px;
     position: relative;
@@ -15,7 +15,7 @@ body {
 
 h1 {
     text-align: center;
-    color: #333;
+    color: #ffffff;
     margin-bottom: 30px;
 }
 
@@ -24,10 +24,10 @@ h1 {
     justify-content: center;
     gap: 20px;
     margin-bottom: 20px;
-    background-color: #fff;
+    background-color: #141413;
     padding: 15px;
     border-radius: 4px;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.3);
 }
 
 .filter-group {
@@ -38,22 +38,24 @@ h1 {
 .filter-label {
     font-weight: bold;
     margin-bottom: 5px;
-    color: #555;
+    color: #ffffff;
 }
 
 select {
     padding: 8px 12px;
-    border: 1px solid #ddd;
+    border: 1px solid #333;
     border-radius: 4px;
     min-width: 180px;
+    background-color: #141413;
+    color: #ffffff;
 }
 
 button {
-    background-color: #5a75b0;
+    background-color: #1DB954;
     color: white;
     border: none;
     padding: 8px 16px;
-    border-radius: 4px;
+    border-radius: 20px;
     cursor: pointer;
     font-size: 14px;
     transition: background-color 0.2s;
@@ -61,15 +63,16 @@ button {
 }
 
 button:hover {
-    background-color: #4a65a0;
+    background-color: #1ed760;
 }
 
 #chart-container {
     display: flex;
     justify-content: center;
-    width: 100%;
-    height: 1000px;
+    width: 500px;
+    height: 1008px;
     position: relative;
+    margin: 0 auto;
 }
 
 #sankey-chart {
@@ -80,8 +83,8 @@ button:hover {
 
 svg {
     display: block;
-    width: 1600px;
-    height: 1000px;
+    width: 500px;
+    height: 1008px;
     overflow: visible;
     margin: 0 auto;
 }
@@ -90,18 +93,20 @@ svg {
 .tooltip {
     position: absolute;
     padding: 8px;
-    background: rgba(255, 255, 255, 0.9);
-    border: 1px solid #ddd;
+    background: rgba(20, 20, 20, 0.9);
+    border: 1px solid #333;
     border-radius: 4px;
     pointer-events: none;
     font-size: 12px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.3);
     z-index: 10;
     max-width: 200px;
+    color: #ffffff;
 }
 
 .tooltip h3 {
     margin: 0 0 8px 0;
+    color: #1DB954;
 }
 
 .tooltip p {
@@ -117,9 +122,9 @@ svg {
 
 .node text {
     pointer-events: none;
-    font-size: 14px;
+    font-size: 12px;
     font-weight: 500;
-    fill: #333;
+    fill: #ffffff;
 }
 
 /* Link styling */
@@ -131,64 +136,66 @@ svg {
     stroke-opacity: 0.9;
 }
 
-/* Platform node colors - specific for each platform */
+/* Platform node colors - updated to match Spotify palette */
 .platform-Amazon {
-    fill: #57a7f0; /* Light blue */
+    fill: #F1A277; /* Light coral from palette */
 }
 
 .platform-Apple-Music {
-    fill: #e94335; /* Red */
+    fill: #F66EBE; /* Pink from palette */
 }
 
 .platform-Deezer {
-    fill: #f06ebd; /* Pink */
+    fill: #6A1AB4; /* Purple from palette */
 }
 
 .platform-YouTube {
-    fill: #e33810; /* Darker red */
+    fill: #F66EBE; /* Pink from palette */
 }
 
 .platform-SiriusXM {
-    fill: #282faf; /* Dark blue */
+    fill: #F1FF48; /* Yellow from palette */
 }
 
 .platform-Spotify {
-    fill: #40a340; /* Green */
+    fill: #1DB954; /* Spotify green */
 }
 
 .platform-TikTok {
-    fill: #000000; /* Black */
+    fill: #141413; /* Dark from palette */
 }
 
 .platform-Pandora {
-    fill: #4169e1; /* Blue */
+    fill: #19D764; /* Light green from palette */
 }
 
 .platform-Shazam {
-    fill: #55a2f0; /* Light blue */
+    fill: #F1FF48; /* Yellow from palette */
 }
 
-/* Genre node styling with gray background */
+/* Genre node styling with dark background */
 .genre-container {
-    fill: #ececec;
-    stroke: #c0c0c0;
+    fill: #141413;
+    stroke: #333333;
     stroke-width: 1px;
 }
 
 .genre-label {
-    font-size: 14px;
+    font-size: 12px;
+    fill: #ffffff;
 }
 
 .genre-abbr {
     font-weight: bold;
-    font-size: 12px;
+    font-size: 10px;
+    fill: #ffffff;
 }
 
 /* Stars for genre success ratings */
 .genre-stars {
-    color: #FFFF00;
+    color: #F1FF48; /* Yellow from palette */
     font-size: 14px;
-    text-shadow: 0px 0px 1px #666; /* Add a slight shadow to make yellow stars more visible */
+    text-shadow: 0px 0px 1px #000; /* Add a slight shadow */
 }
 
 /* Cross-Platform Success legend */
@@ -196,16 +203,18 @@ svg {
     position: absolute;
     top: 50px;
     right: 30px;
-    background-color: rgba(255, 255, 255, 0.9);
+    background-color: rgba(20, 20, 20, 0.9);
     padding: 10px;
     border-radius: 4px;
-    border: 1px solid #ddd;
+    border: 1px solid #333;
+    color: #ffffff;
 }
 
 .cross-platform-title {
     font-weight: bold;
     font-size: 14px;
     margin-bottom: 8px;
+    color: #1DB954;
 }
 
 .platform-rating {
@@ -220,13 +229,13 @@ svg {
 }
 
 .star {
-    color: #FFFF00;
+    color: #F1FF48; /* Yellow from palette */
     font-size: 18px;
-    text-shadow: 0px 0px 1px #666; /* Add a slight shadow to make yellow stars more visible */
+    text-shadow: 0px 0px 1px #000;
 }
 
 .star-empty {
-    color: #ccc;
+    color: #333;
 }
 
 .platform-count {
@@ -241,6 +250,7 @@ svg {
     gap: 30px;
     margin-top: 20px;
     font-size: 14px;
+    color: #ffffff;
 }
 
 .legend-item {
@@ -256,11 +266,11 @@ svg {
 }
 
 .platform-color {
-    background-color: #4682B4;
+    background-color: #1DB954;
 }
 
 .genre-color {
-    background-color: #CD5C5C;
+    background-color: #F66EBE;
 }
 
 /* Star rating for platform success */
@@ -270,10 +280,10 @@ svg {
     position: absolute;
     right: 30px;
     top: 150px;
-    background-color: rgba(255, 255, 255, 0.9);
+    background-color: rgba(20, 20, 20, 0.9);
     padding: 10px;
     border-radius: 4px;
-    border: 1px solid #ddd;
+    border: 1px solid #333;
 }
 
 .star-rating {
@@ -285,39 +295,41 @@ svg {
 .star-rating-label {
     margin-left: 8px;
     font-size: 13px;
+    color: #ffffff;
 }
 
 /* Filter container styling */
 .filter-container {
     display: flex;
     justify-content: center;
-    align-items: center;
-    margin: 20px 0;
     padding: 10px;
-    background-color: #f0f0f0;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    margin-bottom: 20px;
+    background-color: rgba(20, 20, 20, 0.7);
+    border-radius: 20px;
+    width: 80%;
+    max-width: 400px;
+    margin: 10px auto;
 }
 
 .filter-item {
     display: flex;
     align-items: center;
-    gap: 10px;
 }
 
 .filter-item label {
-    font-weight: bold;
-    color: #333;
-    font-size: 16px;
+    font-weight: 500;
+    color: #ffffff;
+    margin-right: 10px;
 }
 
 .filter-item select {
-    padding: 8px 12px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    font-size: 14px;
-    min-width: 200px;
-    background-color: white;
+    padding: 6px 12px;
+    border: 1px solid #333;
+    border-radius: 20px;
+    background-color: #141413;
+    color: #ffffff;
+    outline: none;
+    cursor: pointer;
 }
 
 /* Legend container styling */
@@ -325,55 +337,60 @@ svg {
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin: 10px 0 20px 0;
     padding: 10px;
-    background-color: #f0f0f0;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    margin: 10px auto 20px auto;
+    background-color: rgba(20, 20, 20, 0.7);
+    border-radius: 20px;
+    width: 80%;
+    max-width: 400px;
 }
 
 .legend-container h3 {
     margin: 0 0 10px 0;
-    font-size: 18px;
-    color: #333;
+    font-size: 16px;
+    font-weight: 500;
+    color: #1DB954;
 }
 
 .success-legend {
     display: flex;
-    gap: 20px;
+    flex-direction: column;
+    width: 100%;
 }
 
 .legend-item {
     display: flex;
     align-items: center;
-    gap: 5px;
+    margin-bottom: 5px;
 }
 
 .star {
-    color: #FFBF00;
-    font-size: 18px;
+    color: #F1FF48; /* Yellow from palette */
+    margin-right: 10px;
 }
 
 .legend-text {
     font-size: 14px;
-    color: #333;
+    color: #ffffff;
 }
 
 /* Genre related styling improvements */
 .genre-abbr {
     font-weight: bold;
-    font-size: 14px;
+    font-size: 12px;
     dominant-baseline: middle;
     text-anchor: middle;
+    fill: #ffffff;
 }
 
 .genre-label {
-    font-size: 14px;
+    font-size: 12px;
     dominant-baseline: middle;
+    fill: #ffffff;
 }
 
 .genre-stars {
-    color: #FFBF00;
+    color: #F1FF48;
     font-size: 16px;
     text-shadow: 0px 0px 1px rgba(0,0,0,0.3);
 } 

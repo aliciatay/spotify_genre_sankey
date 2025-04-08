@@ -1,22 +1,22 @@
 // Dimensions for the visualization
-const margin = { top: 10, right: 240, bottom: 10, left: 100 };
-const width = 1600 - margin.left - margin.right;
-const height = 1000 - margin.top - margin.bottom;
+const margin = { top: 10, right: 40, bottom: 10, left: 40 };
+const width = 500 - margin.left - margin.right;
+const height = 1008 - margin.top - margin.bottom;
 
 // Immediately log to help with debugging
 console.log("Visualization.js loaded, setting up constants");
 
-// Color scales for nodes and links
+// Color scales for nodes and links - Updated to Spotify palette
 const platformColors = {
-    "Amazon": "#57a7f0",
-    "Apple Music": "#e94335",
-    "Deezer": "#f06ebd",
-    "YouTube": "#e33810",
-    "SiriusXM": "#282faf",
-    "Spotify": "#40a340",
-    "TikTok": "#000000",
-    "Pandora": "#4169e1",
-    "Shazam": "#55a2f0"
+    "Amazon": "#F1A277", // Light coral
+    "Apple Music": "#F66EBE", // Pink
+    "Deezer": "#6A1AB4", // Purple
+    "YouTube": "#F66EBE", // Pink
+    "SiriusXM": "#F1FF48", // Yellow
+    "Spotify": "#1DB954", // Spotify green
+    "TikTok": "#141413", // Dark
+    "Pandora": "#19D764", // Light green
+    "Shazam": "#F1FF48"  // Yellow
 };
 
 // Genre abbreviations
@@ -99,11 +99,12 @@ const tooltip = d3.select("body")
     .append("div")
     .attr("class", "tooltip")
     .style("opacity", 0)
-    .style("background-color", "#fff")
-    .style("border", "1px solid #ddd")
+    .style("background-color", "rgba(20, 20, 20, 0.9)")
+    .style("color", "#ffffff")
+    .style("border", "1px solid #333")
     .style("border-radius", "5px")
     .style("padding", "10px")
-    .style("box-shadow", "0 0 10px rgba(0,0,0,0.2)")
+    .style("box-shadow", "0 0 10px rgba(0,0,0,0.3)")
     .style("font-family", "Arial, sans-serif");
 
 // Global variable to store the current filter mode
@@ -150,10 +151,10 @@ function updateVisualization() {
         
         console.log("Data filtered:", filteredData.nodes.length, "nodes,", filteredData.links.length, "links");
         
-        // Create the Sankey diagram generator with better node padding
+        // Create the Sankey diagram generator with smaller node size and padding for narrower layout
         const sankey = d3.sankey()
-            .nodeWidth(20)
-            .nodePadding(15)   // Increased padding for better readability
+            .nodeWidth(15)  // Smaller node width for compact layout
+            .nodePadding(8) // Decreased padding for better fit in 500px width
             .extent([[0, 0], [width, height]]);
         
         // Format the data for d3-sankey, which needs numeric node indices
@@ -248,71 +249,49 @@ function updateVisualization() {
                 // Get source platform and use its color
                 if (!d || !d.source || !d.source.name) return "#999";
                 const sourceName = d.source.name;
-                return platformColors[sourceName] || "#999";
-            })
-            .attr("stroke-width", d => {
-                if (!d || typeof d.width === 'undefined' || d.width === null) return 1;
-                return Math.max(1, d.width);
-            })
-            .style("fill", "none")
-            .style("stroke-opacity", 0.7)
-            .on("mouseover", function(event, d) {
-                // Null check for the data
-                if (!d || !d.source || !d.target) return;
-                if (!d.source.name || !d.target.name) return;
-                
-                // Generate a tooltip showing platform → genre info
-                const sourceName = d.source.name;
-                const targetName = d.target.name;
-                
-                // Create tooltip with custom content
-                if (d.source.type === "platform" && d.target.type === "genre") {
-                    // Ensure value exists
-                    const value = d.value !== undefined && d.value !== null ? d.value : 0;
-                    
-                    // Calculate percentage of platform's total hits
-                    const platformTotalHits = getSankeyLinks()
-                        .filter(link => link && link.source === sourceName)
-                        .reduce((sum, link) => sum + (link.value || 0), 0);
-                    
-                    const percentage = platformTotalHits > 0 ? ((value / platformTotalHits) * 100).toFixed(1) : 0;
-                    
-                    const platformColor = platformColors[sourceName] || "#999";
-                    
-                    const content = `
-                        <div style="border-bottom: 2px solid ${platformColor}; margin-bottom: 8px;">
-                            <span style="font-weight: bold; font-size: 14px; color: ${platformColor};">${sourceName}</span>
-                            <span style="color: #666;"> → </span>
-                            <span style="font-weight: bold; color: #333;">${targetName}</span>
-                        </div>
-                        <div style="margin-top: 5px;">
-                            <span style="font-weight: bold; color: #444;">Hit Songs:</span> 
-                            <span style="color: #333;">${value}</span>
-                        </div>
-                        <div style="margin-top: 5px;">
-                            <span style="font-weight: bold; color: #444;">Contribution:</span> 
-                            <span style="color: #333;">${percentage}% of ${sourceName}'s hits</span>
-                        </div>
-                    `;
-                    
-                    // Position near the link
-                    const [x, y] = d3.pointer(event);
-                    
-                    // Show tooltip with custom content
-                    tooltip.transition()
-                        .duration(200)
-                        .style("opacity", 0.95);
-                    
-                    tooltip.html(content)
-                        .style("left", (event.pageX + 10) + "px")
-                        .style("top", (event.pageY - 28) + "px");
+                // If it's a platform (platforms are source nodes)
+                if (platformColors[sourceName]) {
+                    return platformColors[sourceName];
                 }
+                
+                // If it's a genre (source), use a gradient effect based on the target
+                if (d.target && platformColors[d.target.name]) {
+                    return platformColors[d.target.name];
+                }
+                
+                // Default color
+                return "#666";
+            })
+            .attr("stroke-width", d => Math.max(1, d.width))
+            .style("fill", "none")
+            .style("cursor", "pointer")
+            .on("mouseover", function(event, d) {
+                // Highlight the current link
+                d3.select(this)
+                    .attr("stroke-opacity", 1)
+                    .attr("stroke-width", d => Math.max(2, d.width + 1));
+                
+                // Update tooltip content
+                tooltip.html(() => {
+                    // Display appropriate context based on the link direction
+                    const sourceName = d.source.name;
+                    const targetName = d.target.name;
+                    let content = `<h3 style="color:#1DB954;">${sourceName} → ${targetName}</h3>`;
+                    content += `<p>Number of Tracks: ${d.value}</p>`;
+                    return content;
+                })
+                .style("left", (event.pageX + 10) + "px")
+                .style("top", (event.pageY - 10) + "px")
+                .style("opacity", 1);
             })
             .on("mouseout", function() {
+                // Restore original link styling
+                d3.select(this)
+                    .attr("stroke-opacity", 0.7)
+                    .attr("stroke-width", d => Math.max(1, d.width));
+                
                 // Hide tooltip
-                tooltip.transition()
-                    .duration(500)
-                    .style("opacity", 0);
+                tooltip.style("opacity", 0);
             });
         
         console.log("Links drawn");
@@ -347,28 +326,19 @@ function updateVisualization() {
         
         // Add text labels for nodes, better centered in the boxes
         node.append("text")
-            .attr("x", d => d.type === "platform" ? -10 : (d.x1 - d.x0) + 5)
-            .attr("y", d => (d.y1 - d.y0) / 2)
+            .attr("x", d => d.x0 < width / 2 ? d.x1 + 6 : d.x0 - 6)
+            .attr("y", d => (d.y1 + d.y0) / 2)
             .attr("dy", "0.35em")
-            .attr("text-anchor", d => d.type === "platform" ? "end" : "start")
-            .text(d => {
-                // For platform nodes, show full name
-                if (d.type === "platform") {
-                    return d.name;
-                }
-                // For genre nodes, show the full name
-                else {
-                    return d.name;
-                }
-            })
-            .style("font-size", "12px")
-            .style("font-weight", d => d.type === "platform" ? "bold" : "normal")
-            .style("fill", d => d.type === "platform" ? "#333" : "#333"); // Dark gray text for platforms, dark for genres
+            .attr("text-anchor", d => d.x0 < width / 2 ? "start" : "end")
+            .text(d => truncateText(d.name, 9))  // Shorter text to fit in narrower width
+            .style("fill", "#ffffff")
+            .style("font-size", "9px")  // Smaller font for better fit
+            .style("pointer-events", "none");
         
         // Add stars based on popularity to the right of the genre name
         node.filter(d => d.type === "genre")
             .append("text")
-            .attr("x", d => (d.x1 - d.x0) + 120)
+            .attr("x", d => (d.x1 - d.x0) + 40) // Reduced distance for narrower layout
             .attr("y", d => (d.y1 - d.y0) / 2)
             .attr("dy", "0.35em")
             .attr("text-anchor", "start")
@@ -385,8 +355,8 @@ function updateVisualization() {
                 if (uniquePlatforms >= 5) return "★★";
                 return "★";
             })
-            .style("fill", "#FFBF00") // Gold color for stars
-            .style("font-size", "16px");
+            .style("fill", "#F1FF48") // Yellow from palette
+            .style("font-size", "12px");
         
         console.log("Nodes drawn");
         
