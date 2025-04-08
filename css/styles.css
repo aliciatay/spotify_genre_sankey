@@ -136,25 +136,25 @@ svg {
     stroke-opacity: 0.9;
 }
 
-/* Platform node colors - updated to match Spotify palette */
+/* Platform node colors - updated to match Spotify palette with unique colors */
 .platform-Amazon {
-    fill: #F1A277; /* Light coral from palette */
+    fill: #F1A277; /* Light coral */
 }
 
 .platform-Apple-Music {
-    fill: #F66EBE; /* Pink from palette */
+    fill: #F66EBE; /* Pink */
 }
 
 .platform-Deezer {
-    fill: #6A1AB4; /* Purple from palette */
+    fill: #6A1AB4; /* Purple */
 }
 
 .platform-YouTube {
-    fill: #F66EBE; /* Pink from palette */
+    fill: #E33810; /* Dark red */
 }
 
 .platform-SiriusXM {
-    fill: #F1FF48; /* Yellow from palette */
+    fill: #F1FF48; /* Yellow */
 }
 
 .platform-Spotify {
@@ -162,15 +162,15 @@ svg {
 }
 
 .platform-TikTok {
-    fill: #141413; /* Dark from palette */
+    fill: #141413; /* Dark gray */
 }
 
 .platform-Pandora {
-    fill: #19D764; /* Light green from palette */
+    fill: #19D764; /* Light green */
 }
 
 .platform-Shazam {
-    fill: #F1FF48; /* Yellow from palette */
+    fill: #4A90E2; /* Blue */
 }
 
 /* Genre node styling with dark background */
@@ -256,21 +256,45 @@ svg {
 .legend-item {
     display: flex;
     align-items: center;
-    gap: 5px;
+    margin-bottom: 2px;
 }
 
-.legend-color {
-    width: 16px;
-    height: 16px;
-    border-radius: 3px;
+.star {
+    color: #F1FF48; /* Yellow from palette */
+    margin-right: 6px;
+    font-size: 14px;
 }
 
-.platform-color {
-    background-color: #1DB954;
+.legend-text {
+    font-size: 11px;
+    color: #ffffff;
 }
 
-.genre-color {
-    background-color: #F66EBE;
+/* Genre node styling with dark background */
+.genre-container {
+    fill: #141413;
+    stroke: #333333;
+    stroke-width: 1px;
+}
+
+.genre-label {
+    font-size: 12px;
+    fill: #ffffff;
+}
+
+.genre-abbr {
+    font-weight: bold;
+    font-size: 12px;
+    dominant-baseline: middle;
+    text-anchor: middle;
+    fill: #ffffff;
+}
+
+/* Stars for genre success ratings */
+.genre-stars {
+    color: #F1FF48;
+    font-size: 16px;
+    text-shadow: 0px 0px 1px rgba(0,0,0,0.3);
 }
 
 /* Star rating for platform success */
@@ -298,80 +322,76 @@ svg {
     color: #ffffff;
 }
 
-/* Filter container styling */
+/* Create a wrapper container for filter and legend */
+.controls-wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    max-width: 500px;
+    margin: 10px auto 15px auto;
+}
+
+/* Update filter container for side-by-side layout */
 .filter-container {
     display: flex;
     justify-content: center;
-    padding: 10px;
-    margin-bottom: 20px;
+    align-items: center;
+    padding: 8px 15px;
     background-color: rgba(20, 20, 20, 0.7);
     border-radius: 20px;
-    width: 80%;
-    max-width: 400px;
-    margin: 10px auto;
+    margin: 0;
+    width: 48%;
 }
 
+/* Update legend container for side-by-side layout */
+.legend-container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 8px 15px;
+    background-color: rgba(20, 20, 20, 0.7);
+    border-radius: 20px;
+    margin: 0;
+    width: 48%;
+}
+
+/* Remove the legend title as requested */
+.legend-container h3 {
+    display: none;
+}
+
+/* Make the success legend more compact */
+.success-legend {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    margin: 0;
+}
+
+/* Make the filter items more compact */
 .filter-item {
     display: flex;
     align-items: center;
+    width: 100%;
 }
 
 .filter-item label {
     font-weight: 500;
     color: #ffffff;
-    margin-right: 10px;
+    margin-right: 8px;
+    white-space: nowrap;
 }
 
 .filter-item select {
-    padding: 6px 12px;
+    padding: 5px 10px;
     border: 1px solid #333;
     border-radius: 20px;
     background-color: #141413;
     color: #ffffff;
     outline: none;
     cursor: pointer;
-}
-
-/* Legend container styling */
-.legend-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 10px;
-    margin: 10px auto 20px auto;
-    background-color: rgba(20, 20, 20, 0.7);
-    border-radius: 20px;
-    width: 80%;
-    max-width: 400px;
-}
-
-.legend-container h3 {
-    margin: 0 0 10px 0;
-    font-size: 16px;
-    font-weight: 500;
-    color: #1DB954;
-}
-
-.success-legend {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-}
-
-.legend-item {
-    display: flex;
-    align-items: center;
-    margin-bottom: 5px;
-}
-
-.star {
-    color: #F1FF48; /* Yellow from palette */
-    margin-right: 10px;
-}
-
-.legend-text {
-    font-size: 14px;
-    color: #ffffff;
+    flex-grow: 1;
 }
 
 /* Genre related styling improvements */
@@ -393,4 +413,56 @@ svg {
     color: #F1FF48;
     font-size: 16px;
     text-shadow: 0px 0px 1px rgba(0,0,0,0.3);
+}
+
+/* Make the legend items more compact */
+.legend-container .legend-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 2px;
+}
+
+.legend-container .star {
+    color: #F1FF48; /* Yellow from palette */
+    margin-right: 6px;
+    font-size: 14px;
+}
+
+.legend-container .legend-text {
+    font-size: 11px;
+    color: #ffffff;
+}
+
+/* Keep all the platform and genre node styles */
+.platform-color {
+    background-color: #1DB954;
+}
+
+.genre-color {
+    background-color: #F66EBE;
+}
+
+/* Restore the star styles for ratings */
+.star-ratings {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    right: 30px;
+    top: 150px;
+    background-color: rgba(20, 20, 20, 0.9);
+    padding: 10px;
+    border-radius: 4px;
+    border: 1px solid #333;
+}
+
+.star-rating {
+    display: flex;
+    align-items: center;
+    margin-bottom: 5px;
+}
+
+.star-rating-label {
+    margin-left: 8px;
+    font-size: 13px;
+    color: #ffffff;
 } 

@@ -8,15 +8,15 @@ console.log("Visualization.js loaded, setting up constants");
 
 // Color scales for nodes and links - Updated to Spotify palette
 const platformColors = {
-    "Amazon": "#F1A277", // Light coral
+    "Amazon": "#F1A277",      // Light coral
     "Apple Music": "#F66EBE", // Pink
-    "Deezer": "#6A1AB4", // Purple
-    "YouTube": "#F66EBE", // Pink
-    "SiriusXM": "#F1FF48", // Yellow
-    "Spotify": "#1DB954", // Spotify green
-    "TikTok": "#141413", // Dark
-    "Pandora": "#19D764", // Light green
-    "Shazam": "#F1FF48"  // Yellow
+    "Deezer": "#6A1AB4",      // Purple
+    "YouTube": "#E33810",     // Dark red
+    "SiriusXM": "#F1FF48",    // Yellow
+    "Spotify": "#1DB954",     // Spotify green
+    "TikTok": "#141413",      // Dark gray
+    "Pandora": "#19D764",     // Light green
+    "Shazam": "#4A90E2"       // Blue
 };
 
 // Genre abbreviations
@@ -324,24 +324,41 @@ function updateVisualization() {
             .attr("stroke-width", 1)
             .style("cursor", "move");
         
-        // Add text labels for nodes, better centered in the boxes
-        node.append("text")
-            .attr("x", d => d.x0 < width / 2 ? d.x1 + 6 : d.x0 - 6)
-            .attr("y", d => (d.y1 + d.y0) / 2)
-            .attr("dy", "0.35em")
-            .attr("text-anchor", d => d.x0 < width / 2 ? "start" : "end")
-            .text(d => truncateText(d.name, 9))  // Shorter text to fit in narrower width
-            .style("fill", "#ffffff")
-            .style("font-size", "9px")  // Smaller font for better fit
-            .style("pointer-events", "none");
-        
-        // Add stars based on popularity to the right of the genre name
+        // First, remove any existing text before adding new text
+        node.selectAll("text").remove();
+
+        // Add text labels for genre nodes only
         node.filter(d => d.type === "genre")
             .append("text")
-            .attr("x", d => (d.x1 - d.x0) + 40) // Reduced distance for narrower layout
-            .attr("y", d => (d.y1 - d.y0) / 2)
+            .attr("x", d => d.x0 - 6)
+            .attr("y", d => (d.y1 + d.y0) / 2)
             .attr("dy", "0.35em")
-            .attr("text-anchor", "start")
+            .attr("text-anchor", "end")
+            .text(d => truncateText(d.name, 9))
+            .style("fill", "#ffffff")
+            .style("font-size", "9px")
+            .style("pointer-events", "none");
+
+        // Add text labels for platform nodes
+        node.filter(d => d.type === "platform")
+            .append("text")
+            .attr("x", d => d.x0 - 10)
+            .attr("y", d => (d.y1 + d.y0) / 2)
+            .attr("dy", "0.35em")
+            .attr("text-anchor", "end")
+            .text(d => d.name)
+            .style("fill", "#ffffff")
+            .style("font-size", "9px")
+            .style("font-weight", "bold")
+            .style("pointer-events", "none");
+        
+        // Add stars to the left of genre name (not to the right)
+        node.filter(d => d.type === "genre")
+            .append("text")
+            .attr("x", d => d.x0 - 30) // Position stars to the left of the genre name
+            .attr("y", d => (d.y1 + d.y0) / 2)
+            .attr("dy", "0.35em")
+            .attr("text-anchor", "end")
             .attr("class", "genre-stars")
             .text(d => {
                 // Count platforms connected to this genre
@@ -357,6 +374,19 @@ function updateVisualization() {
             })
             .style("fill", "#F1FF48") // Yellow from palette
             .style("font-size", "12px");
+        
+        // Update text label placement for platform nodes
+        node.filter(d => d.type === "platform")
+            .append("text")
+            .attr("x", d => d.x0 - 10)  // Position to the left of platform nodes
+            .attr("y", d => (d.y1 + d.y0) / 2)
+            .attr("dy", "0.35em")
+            .attr("text-anchor", "end")  // Right-align text to the left of node
+            .text(d => d.name)
+            .style("fill", "#ffffff")
+            .style("font-size", "9px")
+            .style("font-weight", "bold")
+            .style("pointer-events", "none");
         
         console.log("Nodes drawn");
         
@@ -380,16 +410,16 @@ function updateVisualization() {
                 .reduce((sum, l) => sum + (l.value || 0), 0);
             
             const content = `
-                <div style="border-bottom: 2px solid #333; margin-bottom: 8px;">
-                    <span style="font-weight: bold; font-size: 16px; color: #333;">${d.name}</span>
+                <div style="border-bottom: 2px solid #1DB954; margin-bottom: 8px;">
+                    <span style="font-weight: bold; font-size: 16px; color: #1DB954;">${d.name}</span>
                 </div>
                 <div style="margin-top: 5px;">
-                    <span style="font-weight: bold; color: #444;">Total Hits:</span> 
-                    <span style="color: #333;">${totalHits}</span>
+                    <span style="font-weight: bold; color: #ffffff;">Total Hits:</span> 
+                    <span style="color: #ffffff;">${totalHits}</span>
                 </div>
                 <div style="margin-top: 5px;">
-                    <span style="font-weight: bold; color: #444;">Platforms:</span> 
-                    <span style="color: #333;">${connectedPlatforms.length}</span>
+                    <span style="font-weight: bold; color: #ffffff;">Platforms:</span> 
+                    <span style="color: #ffffff;">${connectedPlatforms.length}</span>
                 </div>
                 <div style="margin-top: 8px; display: flex; flex-wrap: wrap; gap: 5px;">
                     ${connectedPlatforms.map(platform => 
@@ -456,21 +486,21 @@ function updateVisualization() {
                     <span style="font-weight: bold; font-size: 16px; color: ${platformColor};">${d.name}</span>
                 </div>
                 <div style="margin-top: 5px;">
-                    <span style="font-weight: bold; color: #444;">Total Hits:</span> 
-                    <span style="color: #333;">${totalHits}</span>
+                    <span style="font-weight: bold; color: #ffffff;">Total Hits:</span> 
+                    <span style="color: #ffffff;">${totalHits}</span>
                 </div>
                 <div style="margin-top: 5px;">
-                    <span style="font-weight: bold; color: #444;">Genres:</span> 
-                    <span style="color: #333;">${connectedGenres.length}</span>
+                    <span style="font-weight: bold; color: #ffffff;">Genres:</span> 
+                    <span style="color: #ffffff;">${connectedGenres.length}</span>
                 </div>
                 <div style="margin-top: 8px;">
-                    <span style="font-weight: bold; color: #444;">Top Genres:</span>
+                    <span style="font-weight: bold; color: #ffffff;">Top Genres:</span>
                 </div>
                 <div style="margin-top: 5px;">
                     ${topGenres.map(genre => {
                         const percentage = ((genre.value / totalHits) * 100).toFixed(1);
                         return `<div style="display: flex; justify-content: space-between; margin-bottom: 3px;">
-                            <span style="color: #333;">${genre.name}</span>
+                            <span style="color: #ffffff;">${genre.name}</span>
                             <span style="color: ${platformColor}; font-weight: bold;">${percentage}%</span>
                         </div>`;
                     }).join('')}
@@ -503,82 +533,71 @@ function updateVisualization() {
 
 // Function to filter data based on the current filter mode
 function filterData() {
-    console.log("Filtering data with mode:", currentFilterMode);
+    // Default filter mode is top10
+    const originalData = getSankeyData();
     
-    // Check that the sankeyData exists and has valid nodes and links
-    if (!window.sankeyData || !window.sankeyData.nodes || !window.sankeyData.links ||
-        !Array.isArray(window.sankeyData.nodes) || !Array.isArray(window.sankeyData.links)) {
-        console.error("Invalid sankeyData:", window.sankeyData);
-        return { nodes: [], links: [] };
+    if (!originalData || !originalData.nodes || !originalData.links) {
+        console.error("No data to filter");
+        return null;
     }
     
-    // Start with all platforms
-    const platforms = window.sankeyData.nodes.filter(node => node && node.type === "platform");
-    let genres = [];
-    let links = [];
+    // Clone data for filtering
+    const filteredData = {
+        nodes: [...originalData.nodes],
+        links: [...originalData.links]
+    };
     
     if (currentFilterMode === "top10") {
-        // Get the top 10 genres based on total hit songs
-        const genreCounts = {};
+        // Get the top 10 genres by hit count
+        const genreCounts = new Map();
         
-        // Count total hits for each genre
-        if (window.sankeyData && Array.isArray(window.sankeyData.links)) {
-            window.sankeyData.links.forEach(link => {
-                if (!link || typeof link !== 'object') return; // Skip invalid links
-                if (!link.target || typeof link.target !== 'string') return; // Skip links with invalid targets
-                if (link.value === undefined || link.value === null) return; // Skip links with missing values
-                
-                const targetName = link.target;
-                genreCounts[targetName] = (genreCounts[targetName] || 0) + (link.value || 0);
-            });
-            
-            console.log("Genre counts calculated:", Object.keys(genreCounts).length, "genres found");
-            
-            // Sort genres by total hits and take top 10
-            const topGenres = Object.entries(genreCounts)
-                .sort((a, b) => b[1] - a[1])
-                .slice(0, 10)
-                .map(entry => entry[0]);
-            
-            console.log("Top genres:", topGenres);
-            
-            // Get the genre nodes for top genres
-            genres = window.sankeyData.nodes.filter(node => 
-                node && node.type === "genre" && topGenres.includes(node.name)
-            );
-            
-            // Get links connecting platforms to these genres
-            links = window.sankeyData.links.filter(link => 
-                link && link.target && topGenres.includes(link.target) && 
-                link.source && link.value !== undefined && link.value !== null
-            );
-        }
-    } else if (currentFilterMode === "all") {
-        // Include all genres
-        genres = window.sankeyData.nodes.filter(node => node && node.type === "genre");
-        links = window.sankeyData.links.filter(link => 
-            link && link.source && link.target && 
-            link.value !== undefined && link.value !== null
-        ); // Only include valid links
-    } else if (currentFilterMode === "single" && selectedGenre) {
-        // Get only the selected genre
-        genres = window.sankeyData.nodes.filter(node => 
-            node && node.type === "genre" && node.name === selectedGenre
+        // Count hits per genre
+        originalData.links.forEach(link => {
+            const targetNode = originalData.nodes.find(n => n.name === link.target);
+            if (targetNode && targetNode.type === "genre") {
+                const currentCount = genreCounts.get(link.target) || 0;
+                genreCounts.set(link.target, currentCount + link.value);
+            }
+        });
+        
+        // Convert to array and sort
+        const sortedGenres = [...genreCounts.entries()]
+            .sort((a, b) => b[1] - a[1])
+            .slice(0, 10) // Take only top 10
+            .map(entry => entry[0]);
+        
+        // Filter nodes to include only platforms and top 10 genres
+        filteredData.nodes = originalData.nodes.filter(node => 
+            node.type === "platform" || 
+            (node.type === "genre" && sortedGenres.includes(node.name))
         );
         
-        // Get links connecting platforms to this genre
-        links = window.sankeyData.links.filter(link => 
-            link && link.target === selectedGenre && 
-            link.source && link.value !== undefined && link.value !== null
+        // Get node names for filtering links
+        const nodeNames = filteredData.nodes.map(node => node.name);
+        
+        // Filter links to include only connections to/from kept nodes
+        filteredData.links = originalData.links.filter(link => 
+            nodeNames.includes(link.source) && nodeNames.includes(link.target)
         );
     }
+    else if (selectedGenre) {
+        // Filter for a specific genre
+        // Keep all platforms and the selected genre
+        filteredData.nodes = originalData.nodes.filter(node => 
+            node.type === "platform" || (node.type === "genre" && node.name === selectedGenre)
+        );
+        
+        // Get node names for filtering links
+        const nodeNames = filteredData.nodes.map(node => node.name);
+        
+        // Filter links to include only connections to/from kept nodes
+        filteredData.links = originalData.links.filter(link => 
+            nodeNames.includes(link.source) && nodeNames.includes(link.target)
+        );
+    }
+    // 'all' filter option removed as it's no longer needed
     
-    console.log("Filtered data:", platforms.length, "platforms,", genres.length, "genres,", links.length, "links");
-    
-    return {
-        nodes: [...platforms, ...genres],
-        links: links
-    };
+    return filteredData;
 }
 
 // Function to get the raw links from sankeyData
